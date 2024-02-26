@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Map</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
+<link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+<style>
+    .btn-control {
+        font:
+            bold 12px/20px 'Helvetica Neue',
+            Arial,
+            Helvetica,
+            sans-serif;
+        background-color: #3386c0;
+        color: #fff;
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        z-index: 1;
+        border: none;
+        width: 200px;
+        margin-left: -100px;
+        display: block;
+        cursor: pointer;
+        padding: 10px 20px;
+        border-radius: 3px;
+    }
+
+    .btn-control:hover {
+        background-color: #4ea0da;
+    }
+
+    .wrapper{
+    height: 100Vh;
+    width: 100vw;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    align-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.wrapper .back{
+    margin: 20px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: none;
+    background-color: black;
+    color: white;
+    font-weight: 550;
+    position: absolute;
+    top: 0;
+    cursor: pointer;
+    left: 0%;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+
+
+.wrapper .back i{
+    font-size: 30px;
+    color: white;
+}
+
+.wrapper .content{
+    height: 30vh;
+    width: 65%;
+    background-color:#202020;
+    bottom: 40px;
+    position: absolute;
+    border-radius: 10px;
+}
+
+.content .icon-container{
+    height: 60px;
+    width: 100%;
+    background-color: #202020;
+    margin-top: 50px;
+    display: flex;
+    border: 1px solid gray;
+    border-left: none;
+    border-right: none;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: row;
+}
+
+.content .icon-container span{
+    color: rgb(217, 255, 0);
+    font-size: 25px;
+}
+
+
+.content .icon-container span  .gray{
+    color: gray;
+}
+
+.content .icon-container img{
+    height: 35px;
+    width: 35px;
+}
+
+.profile .p-container{
+    position: absolute;
+}
+
+
+
+.content .profile{
+    height: 72px;
+    width: 90%;
+    background-color: #202020;
+    display: flex;
+    color: white;
+    justify-content: space-between;
+    padding: 8px 20px;
+}
+
+.content .profile img{
+    height: 60px;
+    width: 60px;
+    margin-top: 15px;
+    border-radius: 100%;
+}
+
+.profile .dp{
+    display: flex;
+    gap: 5px;
+}
+
+.profile .dp p{
+    position: absolute;
+    text-align: left;
+    margin-left: 65px;
+    margin-top: 45px;
+    color: gray;
+}
+
+.profile .dp h3{
+    font-size: 2.5vmin;
+}
+
+
+.profile .dp2{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.profile .dp2 i{
+    font-size: 35px;
+    border: 5px solid white;
+    background: white;
+    border-radius: 100%;
+    color: black;
+}
+
+.profile .dp2 {
+    position: relative;
+}
+
+.profile .dp2::before{
+    content: "";
+    position: absolute;
+    top: 1px;
+    right: -6px;
+    background-color:  rgb(217, 255, 0);
+    color: white;
+    border-radius: 50%;
+    height: 15px;
+    width: 15px;
+    border: 3px solid rgb(44, 45, 45);
+
+}
+
+
+</style>
+
+
+<div id="map"></div>
+<!-- <button id="zoomto" class="btn-control">Zoom to bounds</button> -->
+
+<div class="wrapper">
+    
+    <button class="back" ><i class="uil uil-arrow-left"></i>  Back</button>
+    <div class="content">
+        <div class="icon-container">
+            <span><img src="./paper.png" alt=""></i>.... <img src="./pan.png" alt="">...... <img   src="./cycle.png" alt=""><span class="gray">.......</span>  <img src="./tick.png" alt=""> </span>
+        </div>
+        <div class="profile">
+            <div class="dp">
+                <img src="./dp.jpg" alt="">
+                <h3>Sheri Turner Jr.</h3>
+                <div class="p-container">
+                    <p>lorem</p>
+                </div>
+            </div>
+            <div class="dp2">
+                <span><i class="uil uil-phone"></i></span>
+                <span class="bell"  ><i class="uil uil-bell"></i></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1Ijoic2h1YmhhbW1pc2hyYTIzMTAyMyIsImEiOiJjbHQzNHJjZzYwM3Y4MmluNTFieDBieW1tIn0.DJQOEQdPGL6u3M11dlp5qQ';
+    // A GeoJSON object with a LineString route from the White House to Capitol Hill
+    const geojson = {
+        'type': 'FeatureCollection',
+        'features': [
+            {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'LineString',
+                    'properties': {},
+                    'coordinates': [
+                        [-77.0366048812866, 38.89873175227713],
+                        [-77.03364372253417, 38.89876515143842],
+                        [-77.03364372253417, 38.89549195896866],
+                        [-77.02982425689697, 38.89549195896866],
+                        [-77.02400922775269, 38.89387200688839],
+                        [-77.01519012451172, 38.891416957534204],
+                        [-77.01521158218382, 38.892068305429156],
+                        [-77.00813055038452, 38.892051604275686],
+                        [-77.00832366943358, 38.89143365883688],
+                        [-77.00818419456482, 38.89082405874451],
+                        [-77.00815200805664, 38.88989712255097]
+                    ]
+                }
+            }
+        ]
+    };
+
+    const map = new mapboxgl.Map({
+        container: 'map',
+        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+        style: 'mapbox://styles/mapbox/light-v11',
+        center: [-77.0214, 38.897],
+        zoom: 12
+    });
+
+    map.on('load', () => {
+        map.addSource('LineString', {
+            'type': 'geojson',
+            'data': geojson
+        });
+        map.addLayer({
+            'id': 'LineString',
+            'type': 'line',
+            'source': 'LineString',
+            'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            'paint': {
+                'line-color': 'black',
+                'line-width': 5
+            }
+        });
+
+        document.getElementById('zoomto').addEventListener('click', () => {
+            // Geographic coordinates of the LineString
+            const coordinates = geojson.features[0].geometry.coordinates;
+
+            // Create a 'LngLatBounds' with both corners at the first coordinate.
+            const bounds = new mapboxgl.LngLatBounds(
+                coordinates[0],
+                coordinates[0]
+            );
+
+            // Extend the 'LngLatBounds' to include every coordinate in the bounds result.
+            for (const coord of coordinates) {
+                bounds.extend(coord);
+            }
+
+            map.fitBounds(bounds, {
+                padding: 20
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
